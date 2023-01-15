@@ -42,7 +42,7 @@ public class DocumentCollection implements Serializable {
                     line = br.readLine();
                     while (line != null && !line.contains(".I")) {
                         for (String word : line.split("[^a-zA-Z]+")) {
-                            if (word.equals("")) {
+                            if (word.equals("") || word.length() == 1) {
                                 continue;
                             }
                             word = word.toLowerCase();

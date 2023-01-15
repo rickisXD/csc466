@@ -13,11 +13,6 @@ public class Lab1 {
 
     public static void main(String[] args) {
         DocumentCollection docs = new DocumentCollection("src/documents.txt");
-//        Expected output:
-//        Word = is
-//        Frequency = 33
-//        Distinct Number of Words = 90535
-//        Total word count = 132267
         String word = "";
         int frequency = 0;
         int distinctNumber = 0;
