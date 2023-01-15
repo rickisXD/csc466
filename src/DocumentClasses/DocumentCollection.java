@@ -1,6 +1,6 @@
 package DocumentClasses;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class DocumentCollection implements Serializable {
@@ -28,6 +28,30 @@ public class DocumentCollection implements Serializable {
         this.documents = new HashMap<>();
         //reads the file that is specified as input and it uses the data in the file to populate the documents variable.
         // about 50 lines of code
+        File file = new File(filePath);
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line = br.readLine();
+            int docId = 0;
+            TextVector tv = new TextVector();
+            while (line != null) {
+                if (line.contains(".I ")) {
+                    docId = Integer.parseInt(line.substring(3));
+                } else if (line.equals(".T")) {
+                    line = br.readLine();
+                    for (String word : line.split("[^a-zA-Z]+")) {
+                        word = word.toLowerCase();
+                        if (!noiseWordArray.contains(word)) {
+                            tv.add(word);
+                        }
+                    }
+                    this.documents.put(docId, tv);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public TextVector getDocumentById(int id) {
