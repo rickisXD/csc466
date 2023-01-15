@@ -1,15 +1,16 @@
 package DocumentClasses;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import static java.util.Collections.max;
 
-public class TextVector {
+public class TextVector implements Serializable {
     public HashMap<String, Integer> rawVector;
 
-    public void TextVector() {
+    public TextVector() {
         this.rawVector = new HashMap<>();
     }
 
@@ -46,10 +47,16 @@ public class TextVector {
     }
 
     public int getHighestRawFrequency() {
+        if (this.rawVector.size() == 0) {
+            return 0;
+        }
         return max(this.rawVector.values());
     }
 
     public String getMostFrequentWord() {
+        if (this.rawVector.size() == 0) {
+            return "";
+        }
         int maxCount = this.getHighestRawFrequency();
         for (Map.Entry<String, Integer> m : this.getRawVectorEntrySet()) {
             if (maxCount == m.getValue()) {

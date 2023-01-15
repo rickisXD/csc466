@@ -24,13 +24,12 @@ public class DocumentCollection implements Serializable {
             "which", "while", "who", "whom", "whose", "why", "with", "without",
             "would", "you", "your", "yours", "yes");
 
-    public void DocumentCollection(String filePath) {
+    public DocumentCollection(String filePath) {
         this.documents = new HashMap<>();
         //reads the file that is specified as input and it uses the data in the file to populate the documents variable.
         // about 50 lines of code
         File file = new File(filePath);
         try {
-            FileInputStream fis = new FileInputStream(file);
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             int docId = 0;
@@ -38,15 +37,25 @@ public class DocumentCollection implements Serializable {
             while (line != null) {
                 if (line.contains(".I ")) {
                     docId = Integer.parseInt(line.substring(3));
-                } else if (line.equals(".T")) {
                     line = br.readLine();
-                    for (String word : line.split("[^a-zA-Z]+")) {
-                        word = word.toLowerCase();
-                        if (!noiseWordArray.contains(word)) {
-                            tv.add(word);
+                } else if (line.equals(".W")) {
+                    line = br.readLine();
+                    while (line != null && !line.contains(".I")) {
+                        for (String word : line.split("[^a-zA-Z]+")) {
+                            if (word.equals("")) {
+                                continue;
+                            }
+                            word = word.toLowerCase();
+                            if (!isNoiseWord(word)) {
+                                tv.add(word);
+                            }
                         }
+                        line = br.readLine();
                     }
                     this.documents.put(docId, tv);
+                    tv = new TextVector();
+                } else {
+                    line = br.readLine();
                 }
             }
         } catch (Exception e) {
