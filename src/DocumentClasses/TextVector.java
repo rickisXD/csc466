@@ -19,7 +19,7 @@ public class TextVector {
 
     public void add(String word) {
         if (this.rawVector.containsKey(word)) {
-            this.rawVector.put(word, this.rawVector.get(word) + 1)
+            this.rawVector.put(word, this.rawVector.get(word) + 1);
         } else {
             this.rawVector.put(word, 1);
         }
