@@ -7,12 +7,18 @@ import java.util.Set;
 
 import static java.util.Collections.max;
 
-public class TextVector implements Serializable {
+public abstract class TextVector implements Serializable {
     public HashMap<String, Integer> rawVector;
 
     public TextVector() {
         this.rawVector = new HashMap<>();
     }
+
+    public abstract Set<Map.Entry<String, Double>> getNormalizedVectorEntrySet();
+
+    public abstract void normalize(DocumentCollection dc);
+
+    public abstract double getNormalizedFrequency(String word);
 
     public Set<Map.Entry<String, Integer>> getRawVectorEntrySet() {
         return this.rawVector.entrySet();
@@ -64,5 +70,13 @@ public class TextVector implements Serializable {
             }
         }
         return "";
+    }
+
+    public double getL2Norm() {
+
+    }
+
+    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
+
     }
 }
