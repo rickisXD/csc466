@@ -1,24 +1,25 @@
 package DocumentClasses;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import static java.util.Collections.max;
 
-public abstract class TextVector implements Serializable {
+public class TextVector implements Serializable {
     public HashMap<String, Integer> rawVector;
 
     public TextVector() {
         this.rawVector = new HashMap<>();
     }
 
-    public abstract Set<Map.Entry<String, Double>> getNormalizedVectorEntrySet();
-
-    public abstract void normalize(DocumentCollection dc);
-
-    public abstract double getNormalizedFrequency(String word);
+//    public abstract Set<Map.Entry<String, Double>> getNormalizedVectorEntrySet();
+//
+//    public abstract void normalize(DocumentCollection dc);
+//
+//    public abstract double getNormalizedFrequency(String word);
 
     public Set<Map.Entry<String, Integer>> getRawVectorEntrySet() {
         return this.rawVector.entrySet();
@@ -72,11 +73,11 @@ public abstract class TextVector implements Serializable {
         return "";
     }
 
-    public double getL2Norm() {
+//    public double getL2Norm() {
+//
+//    }
 
-    }
-
-    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
-
-    }
+//    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
+//
+//    }
 }
