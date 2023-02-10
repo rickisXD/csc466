@@ -1,25 +1,25 @@
 package DocumentClasses;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.max;
+import static java.util.Collections.sort;
 
-public class TextVector implements Serializable {
+public abstract class TextVector implements Serializable {
     public HashMap<String, Integer> rawVector;
 
     public TextVector() {
         this.rawVector = new HashMap<>();
     }
 
-//    public abstract Set<Map.Entry<String, Double>> getNormalizedVectorEntrySet();
-//
-//    public abstract void normalize(DocumentCollection dc);
-//
-//    public abstract double getNormalizedFrequency(String word);
+    public abstract Set<Map.Entry<String, Double>> getNormalizedVectorEntrySet();
+
+    public abstract void normalize(DocumentCollection dc);
+
+    public abstract double getNormalizedFrequency(String word);
 
     public Set<Map.Entry<String, Integer>> getRawVectorEntrySet() {
         return this.rawVector.entrySet();
@@ -73,11 +73,31 @@ public class TextVector implements Serializable {
         return "";
     }
 
-//    public double getL2Norm() {
-//
-//    }
+    public double getL2Norm() {
+        double total = 0;
+        for (String word : this.rawVector.keySet()) {
+            total += Math.pow(getNormalizedFrequency(word), 2);
+        }
+        return Math.sqrt(total);
+    }
 
-//    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
-//
-//    }
+    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
+        ArrayList<Integer> closestDocuments = new ArrayList<>();
+        ArrayList<Map.Entry<Integer, Double>> documentDistances = new ArrayList<>();
+        for (Map.Entry<Integer, TextVector> doc : documents.getEntrySet()) {
+            int documentId = doc.getKey();
+            TextVector document = doc.getValue();
+            if (document.rawVector.size() == 0) {
+                documentDistances.add(Map.entry(documentId, 0.0));
+            } else {
+                documentDistances.add(Map.entry(documentId, distanceAlg.findDistance(this, document, documents)));
+            }
+        }
+        sort(documentDistances, new Comparator<Map.Entry<Integer, Double>>() {
+            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        return (ArrayList<Integer>) documentDistances.stream().limit(20).map(Map.Entry::getKey).collect(Collectors.toList());
+    }
 }

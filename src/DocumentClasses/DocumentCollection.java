@@ -24,19 +24,28 @@ public class DocumentCollection implements Serializable {
             "which", "while", "who", "whom", "whose", "why", "with", "without",
             "would", "you", "your", "yours", "yes");
 
-    public DocumentCollection(String filePath) {
+    public DocumentCollection(String filePath, String type) {
         this.documents = new HashMap<>();
-        //reads the file that is specified as input and it uses the data in the file to populate the documents variable.
-        // about 50 lines of code
         File file = new File(filePath);
+        int indexIterator = 1;
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             int docId = 0;
-            TextVector tv = new TextVector();
+            TextVector tv;
+            if (type == "document") {
+                tv = new DocumentVector();
+            } else {
+                tv = new QueryVector();
+            }
             while (line != null) {
                 if (line.contains(".I ")) {
-                    docId = Integer.parseInt(line.substring(3));
+                    if (type != "document") {
+                        docId = indexIterator;
+                        indexIterator++;
+                    } else {
+                        docId = Integer.parseInt(line.substring(3));
+                    }
                     line = br.readLine();
                 } else if (line.equals(".W")) {
                     line = br.readLine();
@@ -53,7 +62,11 @@ public class DocumentCollection implements Serializable {
                         line = br.readLine();
                     }
                     this.documents.put(docId, tv);
-                    tv = new TextVector();
+                    if (type == "document") {
+                        tv = new DocumentVector();
+                    } else {
+                        tv = new QueryVector();
+                    }
                 } else {
                     line = br.readLine();
                 }
@@ -78,7 +91,7 @@ public class DocumentCollection implements Serializable {
     }
 
     public int getSize() {
-        return documents.values().size();
+        return documents.size();
     }
 
     public Collection<TextVector> getDocuments() {
@@ -101,5 +114,11 @@ public class DocumentCollection implements Serializable {
 
     private boolean isNoiseWord(String word) {
         return this.noiseWordArray.contains(word);
+    }
+
+    public void normalize(DocumentCollection dc) {
+        for (TextVector t : this.documents.values()) {
+            t.normalize(dc);
+        }
     }
 }
