@@ -53,7 +53,7 @@ public abstract class TextVector implements Serializable {
     }
 
     public int getDistinctWordCount() {
-        return this.rawVector.keySet().size();
+        return this.rawVector.size();
     }
 
     public int getHighestRawFrequency() {
@@ -85,7 +85,6 @@ public abstract class TextVector implements Serializable {
     }
 
     public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
-        ArrayList<Integer> closestDocuments = new ArrayList<>();
         ArrayList<Map.Entry<Integer, Double>> documentDistances = new ArrayList<>();
         for (Map.Entry<Integer, TextVector> doc : documents.getEntrySet()) {
             int documentId = doc.getKey();
@@ -96,11 +95,7 @@ public abstract class TextVector implements Serializable {
                 documentDistances.add(Map.entry(documentId, distanceAlg.findDistance(this, document, documents)));
             }
         }
-        sort(documentDistances, new Comparator<Map.Entry<Integer, Double>>() {
-            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
+        sort(documentDistances, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
         return (ArrayList<Integer>) documentDistances.stream().limit(20).map(Map.Entry::getKey).collect(Collectors.toList());
     }
 }

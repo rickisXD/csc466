@@ -14,11 +14,11 @@ public class OkapiDistance implements DocumentDistance{
             double documentCount = dc.getSize();
             double dcFreq = dc.getDocumentFrequency(word);
             double docFreq = document.getRawFrequency(word);
-            double queryFreq = query.getRawFrequency(word);
-            double docLength = document.getDistinctWordCount();
+            double queryFreq = entry.getValue();
+            double docLength = document.getTotalWordCount();
             double avdl = dc.getAverageDocumentLength();
             okapi += (Math.log((documentCount - dcFreq + 0.5) / (dcFreq + 0.5)) *
-                    (((k1 + 1) * docFreq) / (k1 * (1 - b + (b * (docLength / avdl))) + docFreq)) *
+                    (((k1 + 1) * docFreq) / ((k1 * (1 - b + (b * (docLength / avdl)))) + docFreq)) *
                     (((k2 + 1) * queryFreq) / (k2 + queryFreq)));
         }
         return okapi;

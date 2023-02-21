@@ -84,7 +84,7 @@ public class DocumentCollection implements Serializable {
         double numDocs = this.documents.size();
         double totalLength = 0;
         for (TextVector t : this.documents.values()) {
-            totalLength += t.getDistinctWordCount();
+            totalLength += t.getTotalWordCount();
         }
         return totalLength / numDocs;
     }
