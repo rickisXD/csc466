@@ -18,10 +18,6 @@ public class Lab3 {
     public static DocumentClasses.DocumentCollection queries;
 
     public static void main(String[] args) {
-        documents = new DocumentCollection("./files/documents.txt", "document");
-        queries = new DocumentCollection("./files/queries.txt", "query");
-        documents.normalize(documents);
-        queries.normalize(documents);
 
         HashMap<Integer, ArrayList<Integer>> humanJudgement = new HashMap<>();
         try {
@@ -46,11 +42,16 @@ public class Lab3 {
             System.out.println(e);
         }
 
+        documents = new DocumentCollection("./files/documents.txt", "document");
+        queries = new DocumentCollection("./files/queries.txt", "query");
+        documents.normalize(documents);
+        queries.normalize(documents);
         HashMap<Integer, ArrayList<Integer>> cosineResults = new HashMap<>();
         for (int q = 1; q < 21; q++) {
             cosineResults.put(q,
                     queries.getDocumentById(q).findClosestDocuments(documents, new CosineDistance()));
         }
+
         documents = new DocumentCollection("./files/documents.txt", "document");
         queries = new DocumentCollection("./files/queries.txt", "query");
         HashMap<Integer, ArrayList<Integer>> okapiResults = new HashMap<>();

@@ -81,11 +81,10 @@ public class DocumentCollection implements Serializable {
     }
 
     public double getAverageDocumentLength() {
-        double numDocs = 0;
+        double numDocs = this.documents.size();
         double totalLength = 0;
         for (TextVector t : this.documents.values()) {
-            numDocs += 1;
-            totalLength += t.getTotalWordCount();
+            totalLength += t.getDistinctWordCount();
         }
         return totalLength / numDocs;
     }
