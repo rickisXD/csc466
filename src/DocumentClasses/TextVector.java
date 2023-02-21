@@ -38,6 +38,9 @@ public abstract class TextVector implements Serializable {
     }
 
     public int getRawFrequency(String word) {
+        if (!this.rawVector.containsKey(word)) {
+            return 0;
+        }
         return this.rawVector.get(word);
     }
 
