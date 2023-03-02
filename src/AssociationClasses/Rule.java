@@ -4,8 +4,9 @@ public class Rule {
 
     public ItemSet left, right;
 
-    public Rule() {
-
+    public Rule(ItemSet left, ItemSet right) {
+        this.left = left;
+        this.right = right;
     }
 
     public boolean equals(Rule r) {
