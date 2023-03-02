@@ -10,15 +10,14 @@ public class Lab5 {
 
     public static double minSupport = 0.01;
 
-    public static void main(String[] args) {//lists of all itemsets
-        HashMap<Integer, ArrayList<ItemSet>> frequentItemSet; //lists frequent itemsets. E.g., for key=1, store all 1-itemsets, for key=2, all 2-itemsets and so on.
-
+    public static void main(String[] args) {
+        HashMap<Integer, ArrayList<ItemSet>> frequentItemSet;
         process("./files/shopping_data.txt");
     }
 
     public static void process(String fileName) {
         ArrayList<ItemSet> transactions = new ArrayList<>();
-        HashSet<Integer> allItems = new HashSet<>(); //lists of all items
+        HashSet<Integer> allItems = new HashSet<>();
         HashMap<Integer, ArrayList<ItemSet>> freqTxns = new HashMap<>();
         int biggestTransaction = 0;
         try {
