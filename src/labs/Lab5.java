@@ -80,7 +80,7 @@ public class Lab5 {
                 }
             }
         }
-        return ((i / (double) transactions.size()) > minSupport);
+        return ((i / (double) transactions.size()) >= minSupport);
     }
 
     public static ArrayList<ItemSet> findFrequentSingleItemSets(ArrayList<ItemSet> transactions, HashSet<Integer> allItems) {
