@@ -66,23 +66,13 @@ public class Matrix {
 
     private double findEntropy(ArrayList<Integer> rows) {
         double numRows = rows.size();
-        double num1 = 0;
-        double num2 = 0;
-        double num3 = 0;
-        for (int row : rows) {
-            switch (this.matrix.get(row).get(4)) {
-                case 1:
-                    num1++;
-                case 2:
-                    num2++;
-                case 3:
-                    num3++;
-            }
-        }
-        double n1 = -(num1 / numRows) * log2(num1 / numRows);
-        double n2 = -(num2 / numRows) * log2(num2 / numRows);
-        double n3 = -(num3 / numRows) * log2(num3 / numRows);
-        return n1 + n2 + n3;
+        double num1 = findFrequency(4, 1, rows);
+        double num2 = findFrequency(4, 2, rows);
+        double num3 = findFrequency(4, 3, rows);
+        double e1 = -(num1 / numRows) * log2(num1 / numRows);
+        double e2 = -(num2 / numRows) * log2(num2 / numRows);
+        double e3 = -(num3 / numRows) * log2(num3 / numRows);
+        return e1 + e2 + e3;
     } //finds the entropy of the dataset that consists of the specified rows.
 
     private double findEntropy(int attribute, ArrayList<Integer> rows) {
@@ -105,40 +95,29 @@ public class Matrix {
     public double computeIGR(int attribute, ArrayList<Integer> rows) {
         HashMap<Integer, Double> valueCounts = new HashMap<>();
         double numRows = rows.size();
-        for (int row : rows) {
-            int value = this.matrix.get(row).get(attribute);
-            if (!valueCounts.containsKey(value)) {
-                valueCounts.put(value, 1.0);
-            } else {
-                valueCounts.put(value, valueCounts.get(value) + 1);
-            }
+        HashSet<Integer> values = findDifferentValues(attribute, rows);
+        for (int value : values) {
+            valueCounts.put(value, (double) findFrequency(attribute, value, rows));
         }
-        double entropy = 0;
+        double div = 0;
         for (double count : valueCounts.values()) {
-            entropy += -(count / numRows) * log2(count / numRows);
+            div += -(count / numRows) * log2(count / numRows);
         }
         double gain = findGain(attribute, rows);
         if (gain == 0) {
             return 0;
         }
-        return gain / entropy;
+        return gain / div;
     }// returns the Information Gain Ratio, where we only look at the data defined by the set of rows and we consider splitting on attribute.
 
     public int findMostCommonValue(ArrayList<Integer> rows) {
-        HashMap<Integer, Integer> classCounts = new HashMap<>() {{
-            put(1, 0);
-            put(2, 0);
-            put(3, 0);
-        }};
-        for (int row : rows) {
-            int classification = this.matrix.get(row).get(4);
-            classCounts.put(classification, classCounts.get(classification) + 1);
-        }
-        int max = 0;
+        HashMap<Integer, Integer> classCounts = new HashMap<>();
+        classCounts.put(1, findFrequency(4, 1, rows));
+        classCounts.put(2, findFrequency(4, 2, rows));
+        classCounts.put(3, findFrequency(4, 3, rows));
         int maxKey = 1;
         for (int key : classCounts.keySet()) {
-            if (classCounts.get(key) > max) {
-                max = classCounts.get(key);
+            if (classCounts.get(key) > classCounts.get(maxKey)) {
                 maxKey = key;
             }
         }

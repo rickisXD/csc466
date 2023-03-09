@@ -57,45 +57,18 @@ public class Lab6 {
 
     public static ArrayList<Rule> split(ItemSet itemSet, ArrayList<ItemSet> transactions) {
         ArrayList<Rule> rules = new ArrayList<>();
-//            while (seenItemsLeft.size() != itemSet.items.size()) {
-//                ArrayList<Integer> left = new ArrayList<>();
-//                ArrayList<Integer> right = new ArrayList<>();
-//                int leftSize = 0;
-//                int j = 0;
-//                while (leftSize != size && j < itemSet.items.size()) {
-//                    int i = itemSet.items.get(j);
-//                    if (!seenItemsLeft.contains(i)) {
-//                        left.add(i);
-//                        leftSize++;
-//                        seenItemsLeft.add(i);
-//                    } else {
-//                        right.add(j);
-//                    }
-//                    j++;
-//                }
-//                while (j < itemSet.items.size()) {
-//                    int i = itemSet.items.get(j);
-//                    right.add(i);
-//                    j++;
-//                }
-//                Rule r = new Rule(new ItemSet(left), new ItemSet(right));
-//                if (confidence(r, transactions) >= minConfidence) {
-//                    rules.add(r);
-//                }
-//            }
         // below code from GeekForGeeks!!
         /*set_size of power set of a set
         with set_size n is (2**n -1)*/
         int setSize = itemSet.items.size();
         long pow_set_size = (long) Math.pow(2, setSize);
-        int counter, j;
 
         /*Run from counter 000..0 to
         111..1*/
-        for (counter = 0; counter < pow_set_size; counter++) {
+        for (int counter = 0; counter < pow_set_size; counter++) {
             ArrayList<Integer> left = new ArrayList<>();
             ArrayList<Integer> right = new ArrayList<>();
-            for (j = 0; j < setSize; j++) {
+            for (int j = 0; j < setSize; j++) {
                 /* Check if jth bit in the
                 counter is set If set then
                 print jth element from set */

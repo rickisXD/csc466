@@ -40,17 +40,14 @@ public class Lab7 {
                 maxIGRattr = attribute;
             }
         }
-        if (currentIGR - infoGains.get(maxIGRattr) < minIGR) {
+        attributes.remove(Integer.valueOf(maxIGRattr));
+        if (infoGains.get(maxIGRattr) < minIGR) {
             System.out.println(tab.repeat(level) + String.format(endStmt, data.findMostCommonValue(rows)));
             return;
         }
         HashMap<Integer, ArrayList<Integer>> splits = data.split(maxIGRattr, rows);
-        attributes.remove(Integer.valueOf(maxIGRattr));
         for (int value : splits.keySet()) {
             System.out.println(tab.repeat(level) + String.format(whenStmt, maxIGRattr + 1, value));
-            if (level + 1 == 3 && splits.get(value).size() == 25) {
-                double abc = data.computeIGR(maxIGRattr, rows);
-            }
             printDecisionTree(data, attributes, splits.get(value), level + 1, infoGains.get(maxIGRattr));
         }
     } //recursive method that prints the decision tree. It takes as input the data, the set of attributes that have not been used so far in this branch of the tree, the set of rows to examine, the current level (initially 0, use to determine how many tabs to print), and the information gain ratio from last iteration (I set it initially equal to 100, used to create terminating condition).
