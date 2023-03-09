@@ -29,7 +29,7 @@ public class Matrix {
         }
     }
 
-    private int findFrequency(int attribute, int value, ArrayList<Integer> rows) {
+    public int findFrequency(int attribute, int value, ArrayList<Integer> rows) {
         int numOcc = 0;
         for (int row : rows) {
             if (this.matrix.get(row).get(attribute) == value) {
